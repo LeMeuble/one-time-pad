@@ -3,10 +3,13 @@ import sys
 import string
 import base64
 import secrets
+import argparse
 import subprocess
+
 
 alphabet = {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, 'a': 10, 'b': 11, 'c': 12, 'd': 13, 'e': 14, 'f': 15, 'g': 16, 'h': 17, 'i': 18, 'j': 19, 'k': 20, 'l': 21, 'm': 22, 'n': 23, 'o': 24, 'p': 25, 'q': 26, 'r': 27, 's': 28, 't': 29, 'u': 30, 'v': 31, 'w': 32, 'x': 33, 'y': 34, 'z': 35, 'A': 36, 'B': 37, 'C': 38, 'D': 39, 'E': 40, 'F': 41, 'G': 42, 'H': 43, 'I': 44, 'J': 45, 'K': 46, 'L': 47, 'M': 48, 'N': 49, 'O': 50, 'P': 51, 'Q': 52, 'R': 53, 'S': 54, 'T': 55, 'U': 56, 'V': 57, 'W': 58, 'X': 59, 'Y': 60, 'Z': 61, '!': 62, '"': 63, '#': 64, '$': 65, '%': 66, '&': 67, "'": 68, '(': 69, ')': 70, '*': 71, '+': 72, ',': 73, '-': 74, '.': 75, '/': 76, ':': 77, ';': 78, '<': 79, '=': 80, '>': 81, '?': 82, '@': 83, '[': 84, '\\': 85, ']': 86, '^': 87, '_': 88, '`': 89, '{': 90, '|': 91, '}': 92, '~': 93, ' ': 94, '\t': 95, '\n': 96, '\r': 97}
 debug_mode = False
+no_errors = False
 
 
 def generator(text_length, length=32):
@@ -20,33 +23,43 @@ def generator(text_length, length=32):
 	return _separator.join(key)
 
 
-def encrypt():
-	global debug_mode
+def encrypt(text, key=None):
+	global debug_mode, no_errors
 
-	key = ""
+	if key is None:
 
-	text = str(input("Enter text to encrypt : "))
-	while len(key) < len(text):
+		key = ""
+
 		print(f"Recommended key : {generator(len(text))}")
-		key = str(input(f"Enter a key (must be longer or equal to {len(text)}) : "))
+		while len(key) < len(text):
+			key = str(input(f"Enter a key (must be longer or equal to {len(text)}) : "))
+
+	if len(key) < len(text) and not no_errors:
+		print("Key is too short")
+		return
 
 	text = list(text)
 	key = list(key)
-	print(f"Text = {text}")
-	print(f"Key = {key}")
+
+	if debug_mode:
+		print(f"Text = {text}")
+		print(f"Key = {key}")
 
 	i = 0
 	for letters in key:
 		key[i] = (list(alphabet.values())[list(alphabet.keys()).index(letters)])
 		i += 1
-	print(f"Key index = {key}")
+
+	if debug_mode:
+		print(f"Key index = {key}")
 
 	i = 0
 	for letters in text:
 		text[i] = ((list(alphabet.values())[list(alphabet.keys()).index(letters)]) + key[i]) % len(alphabet)
 		i += 1
 
-	print(f"Encrypted index = {text}")
+	if debug_mode:
+		print(f"Encrypted index = {text}")
 
 	i = 0
 	for letters in text:
@@ -56,43 +69,70 @@ def encrypt():
 	print(f"Encrypted text = {separator.join(text)}")
 
 
-def decrypt():
-	global debug_mode
+def decrypt(text, key=None):
 
-	key = ""
+	global debug_mode, no_errors
 
-	text = str(input("Enter text to decrypt : "))
-	key = str(input(f"Enter the key : "))
+	#print(alphabet.keys(), "\n", alphabet.values())
+
+	if key is None:
+		key = str(input(f"Enter the key : "))
+
+	if len(key) < len(text) and not no_errors:
+		print("Key is too short to decrypt. If you want to run anyway, please use -no_errors")
+		return
 
 	text = list(text)
 	key = list(key)
-	print(f"Text = {text}")
-	print(f"Key = {key}")
+
+	if debug_mode:
+		print(f"\nText = {text}")
+		print(f"Key = {key}\n")
 
 	i = 0
 	for letters in key:
 		key[i] = (list(alphabet.values())[list(alphabet.keys()).index(letters)])
 		i += 1
-	print(f"Key index = {key}")
+
+	if debug_mode:
+		print(f"Key index = {key}")
 
 	i = 0
-	for letters in text:
-		text[i] = ((list(alphabet.values())[list(alphabet.keys()).index(letters)]) - key[i]) % len(alphabet)
-		i += 1
+	try:
+		for letters in text:
+			text[i] = ((list(alphabet.values())[list(alphabet.keys()).index(letters)]) - key[i]) % len(alphabet)
+			i += 1
+		if debug_mode:
+			print(f"Decrypted index = {text}")
 
-	print(f"Encrypted index = {text}")
+	except IndexError:
+		print(f"Error, operation stopped at character {i}/{len(text)}")
+
+		try:
+			i = 0
+			for letters in text:
+				text[i] = (list(alphabet.keys())[list(alphabet.values()).index(letters)])
+				i += 1
+		except ValueError:
+
+			separator = ""
+			print(f"Partially decrypted text = {separator.join(text)}")
+
+			return
 
 	i = 0
 	for letters in text:
 		text[i] = (list(alphabet.keys())[list(alphabet.values()).index(letters)])
 		i += 1
 	separator = ""
-	print(f"Encrypted text = {separator.join(text)}")
+	text = separator.join(text)
+	if debug_mode:
+		print(f"Decrypted text = {separator.join(text)}")
 
 
 def encrypt_file():
 
-	global debug_mode
+	global debug_mode, no_errors
 	key = ""
 
 	file = input("Select file to encrypt : ")
@@ -160,7 +200,7 @@ def encrypt_file():
 
 def decrypt_file():
 
-	global debug_mode
+	global debug_mode, no_errors
 
 	key = ""
 	text = ""
@@ -197,7 +237,7 @@ def decrypt_file():
 		text[i] = ((list(alphabet.values())[list(alphabet.keys()).index(letters)]) - key[i]) % len(alphabet)
 		i += 1
 	if debug_mode:
-		print(f"Encrypted index = {text}")
+		print(f"Decrypted index = {text}")
 
 	i = 0
 	for letters in text:
@@ -223,37 +263,36 @@ def decrypt_file():
 			sys.exit()
 
 
-choice = None
-print("0 : Exit")
-print("encrypt : Encrypt text")
-print("decrypt : Decrypt text")
-print("encrypt_file : Encrypt file")
-print("decrypt_file : Decrypt file")
+if __name__ == "__main__":
+	parser = argparse.ArgumentParser()
+	parser.add_argument("-encrypt", help="Encrypt a piece of text, for example -encrypt 'MyText")
+	parser.add_argument("-decrypt", help="Decrypt a piece of text, for example -decrypt 'MySecretText")
 
-while True:
-	while choice not in ["exit", "encrypt", "decrypt", "encrypt_file", "decrypt_file", "clear"]:
-		choice = str(input("> "))
+	parser.add_argument("-key", help="Key to encrypt your text, for example -key 'MySecretKey'")
+	parser.add_argument("-debug", help="Enable debug mode", action="store_true")
+	parser.add_argument("-noErrors", help="Allow to run encryption/decryption with a key shorter than required", action="store_true")
 
-	if choice == "exit":
-		sys.exit()
+	args = parser.parse_args()
 
-	if choice == "encrypt":
-		encrypt()
+	if args.debug:
+		debug_mode = True
 
-	if choice == "decrypt":
-		decrypt()
+	if args.noErrors:
+		no_errors = True
 
-	if choice == "encrypt_file":
-		encrypt_file()
+	if args.encrypt:
+		if args.key:
+			encrypt(args.encrypt, args.key)
+		else:
+			encrypt(args.encrypt)
 
-	if choice == "decrypt_file":
-		decrypt_file()
+	if args.decrypt:
+		if args.key:
 
-	if choice == "clear":
-		os.system("cls")
+			decrypt(args.decrypt, args.key)
+		else:
+			decrypt(args.decrypt)
 
-	print()
-	choice = None
 
 # Todo : Add settings with -> security level, debug mode
 # Todo : Add commands ->  help
