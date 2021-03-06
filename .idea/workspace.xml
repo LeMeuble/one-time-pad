@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="381a3f65-6462-4e26-924b-cc02036e9a12" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <excluded-from-favorite>
+      <branch-storage>
+        <map>
+          <entry type="LOCAL">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$" source="master" />
+              </list>
+            </value>
+          </entry>
+        </map>
+      </branch-storage>
+    </excluded-from-favorite>
+    <favorite-branches>
+      <branch-storage>
+        <map>
+          <entry type="REMOTE">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$" source="origin/dev_v1" />
+              </list>
+            </value>
+          </entry>
+        </map>
+      </branch-storage>
+    </favorite-branches>
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="LeMeuble &lt;luciengravot2@gmail.com&gt;" />
+        <option value="Le" />
+      </list>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="D:\Informatique\Projects\one-time-pad\.idea" />
+      </set>
+    </option>
+  </component>
+  <component name="ProjectId" id="1oTteRHUx61NrEnG3nlbYjbsd72" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/main.py" />
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="381a3f65-6462-4e26-924b-cc02036e9a12" name="Default Changelist" comment="" />
+      <created>1613322502812</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1613322502812</updated>
+    </task>
+    <task id="LOCAL-00001" summary="- Added command system (WIP)&#10;- Can now operate with incomplete keys (only for text)">
+      <created>1613594209168</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1613594209168</updated>
+    </task>
+    <task id="LOCAL-00002" summary="- Putted everything in classes&#10;- Fixed issue with file text used as bytes rather than as a string">
+      <created>1615062497155</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1615062497155</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="- Added command system (WIP)&#10;- Can now operate with incomplete keys (only for text)" />
+    <MESSAGE value="- Putted everything in classes&#10;- Fixed issue with file text used as bytes rather than as a string" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Putted everything in classes&#10;- Fixed issue with file text used as bytes rather than as a string" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="585" y="147" width="1092" height="688" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1615062599182">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="585" y="147" width="1092" height="688" key="#com.intellij.execution.impl.EditConfigurationsDialog/1920.0.1280.984/0.0.1920.1040@0.0.1920.1040" timestamp="1615062599182" />
+    <state x="614" y="117" key="CommitChangelistDialog2" timestamp="1615068620427">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="614" y="117" key="CommitChangelistDialog2/1920.0.1280.984/0.0.1920.1040@0.0.1920.1040" timestamp="1615068620427" />
+    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog" timestamp="1613594326037">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog/1920.0.1280.984/0.0.1920.1040@0.0.1920.1040" timestamp="1613594326037" />
+    <state x="740" y="285" key="FileChooserDialogImpl" timestamp="1615035058517">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="740" y="285" key="FileChooserDialogImpl/1920.0.1280.984/0.0.1920.1040@0.0.1920.1040" timestamp="1615035058517" />
+    <state width="1899" height="348" key="GridCell.Tab.0.bottom" timestamp="1615062637039">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="348" key="GridCell.Tab.0.bottom/1920.0.1280.984/0.0.1920.1040@0.0.1920.1040" timestamp="1615062637039" />
+    <state width="1899" height="348" key="GridCell.Tab.0.center" timestamp="1615062637039">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="348" key="GridCell.Tab.0.center/1920.0.1280.984/0.0.1920.1040@0.0.1920.1040" timestamp="1615062637039" />
+    <state width="1899" height="348" key="GridCell.Tab.0.left" timestamp="1615062637039">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="348" key="GridCell.Tab.0.left/1920.0.1280.984/0.0.1920.1040@0.0.1920.1040" timestamp="1615062637039" />
+    <state width="1899" height="348" key="GridCell.Tab.0.right" timestamp="1615062637039">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="348" key="GridCell.Tab.0.right/1920.0.1280.984/0.0.1920.1040@0.0.1920.1040" timestamp="1615062637039" />
+    <state width="1899" height="348" key="GridCell.Tab.1.bottom" timestamp="1615062637039">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="348" key="GridCell.Tab.1.bottom/1920.0.1280.984/0.0.1920.1040@0.0.1920.1040" timestamp="1615062637039" />
+    <state width="1899" height="348" key="GridCell.Tab.1.center" timestamp="1615062637039">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="348" key="GridCell.Tab.1.center/1920.0.1280.984/0.0.1920.1040@0.0.1920.1040" timestamp="1615062637039" />
+    <state width="1899" height="348" key="GridCell.Tab.1.left" timestamp="1615062637039">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="348" key="GridCell.Tab.1.left/1920.0.1280.984/0.0.1920.1040@0.0.1920.1040" timestamp="1615062637039" />
+    <state width="1899" height="348" key="GridCell.Tab.1.right" timestamp="1615062637039">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1899" height="348" key="GridCell.Tab.1.right/1920.0.1280.984/0.0.1920.1040@0.0.1920.1040" timestamp="1615062637039" />
+    <state x="92" y="92" width="1736" height="856" key="ShowDiffWithBranchDialog" timestamp="1613594326037">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="92" y="92" width="1736" height="856" key="ShowDiffWithBranchDialog/1920.0.1280.984/0.0.1920.1040@0.0.1920.1040" timestamp="1613594326037" />
+    <state x="552" y="254" key="Vcs.Push.Dialog.v2" timestamp="1615068629471">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="552" y="254" key="Vcs.Push.Dialog.v2/1920.0.1280.984/0.0.1920.1040@0.0.1920.1040" timestamp="1615068629471" />
+    <state x="92" y="92" width="1736" height="856" key="com.intellij.dvcs.ui.CompareBranchesDialog" timestamp="1613594558405">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="92" y="92" width="1736" height="856" key="com.intellij.dvcs.ui.CompareBranchesDialog/1920.0.1280.984/0.0.1920.1040@0.0.1920.1040" timestamp="1613594558405" />
+    <state x="755" y="312" key="git4idea.merge.GitMergeDialog" timestamp="1613594555841">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="755" y="312" key="git4idea.merge.GitMergeDialog/1920.0.1280.984/0.0.1920.1040@0.0.1920.1040" timestamp="1613594555841" />
+    <state x="623" y="225" key="search.everywhere.popup" timestamp="1613594263448">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="623" y="225" key="search.everywhere.popup/1920.0.1280.984/0.0.1920.1040@0.0.1920.1040" timestamp="1613594263448" />
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="PythonConfigurationType">
+        <watch expression="text" />
+      </configuration>
+    </watches-manager>
+  </component>
+</project>
