@@ -14,14 +14,21 @@ class KeyTooShort(Exception):
 
 
 class OneTimePad:
-	
-	alphabet = {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, 'a': 10, 'b': 11, 'c': 12,
-				'd': 13, 'e': 14, 'f': 15, 'g': 16, 'h': 17, 'i': 18, 'j': 19, 'k': 20, 'l': 21, 'm': 22, 'n': 23, 'o': 24,
-				'p': 25, 'q': 26, 'r': 27, 's': 28, 't': 29, 'u': 30, 'v': 31, 'w': 32, 'x': 33, 'y': 34, 'z': 35, 'A': 36,
-				'B': 37, 'C': 38, 'D': 39, 'E': 40, 'F': 41, 'G': 42, 'H': 43, 'I': 44, 'J': 45, 'K': 46, 'L': 47, 'M': 48,
-				'N': 49, 'O': 50, 'P': 51, 'Q': 52, 'R': 53, 'S': 54, 'T': 55, 'U': 56, 'V': 57, 'W': 58, 'X': 59, 'Y': 60,
-				'Z': 61, '!': 62, '"': 63, '#': 64, '$': 65, '%': 66, '&': 67, "'": 68, '(': 69, ')': 70, '*': 71, '+': 72,
-				',': 73, '-': 74, '.': 75, '/': 76, ':': 77, ';': 78, '<': 79, '=': 80, '>': 81, '?': 82, '@': 83, '[': 84,
+
+	alphabet = {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, 'a': 10, 'b': 11,
+				'c': 12,
+				'd': 13, 'e': 14, 'f': 15, 'g': 16, 'h': 17, 'i': 18, 'j': 19, 'k': 20, 'l': 21, 'm': 22, 'n': 23,
+				'o': 24,
+				'p': 25, 'q': 26, 'r': 27, 's': 28, 't': 29, 'u': 30, 'v': 31, 'w': 32, 'x': 33, 'y': 34, 'z': 35,
+				'A': 36,
+				'B': 37, 'C': 38, 'D': 39, 'E': 40, 'F': 41, 'G': 42, 'H': 43, 'I': 44, 'J': 45, 'K': 46, 'L': 47,
+				'M': 48,
+				'N': 49, 'O': 50, 'P': 51, 'Q': 52, 'R': 53, 'S': 54, 'T': 55, 'U': 56, 'V': 57, 'W': 58, 'X': 59,
+				'Y': 60,
+				'Z': 61, '!': 62, '"': 63, '#': 64, '$': 65, '%': 66, '&': 67, "'": 68, '(': 69, ')': 70, '*': 71,
+				'+': 72,
+				',': 73, '-': 74, '.': 75, '/': 76, ':': 77, ';': 78, '<': 79, '=': 80, '>': 81, '?': 82, '@': 83,
+				'[': 84,
 				'\\': 85, ']': 86, '^': 87, '_': 88, '`': 89, '{': 90, '|': 91, '}': 92, '~': 93, ' ': 94, '\t': 95,
 				'\n': 96, '\r': 97}
 	debug_mode = False
@@ -34,6 +41,12 @@ class OneTimePad:
 
 	@staticmethod
 	def generator(text_length, strength=32):
+		"""Generates a random string
+		:param text_length: The minimum length of the string generated
+		:param strength: The maximum length to be added to the string (32 by default)
+		:return: The key as a string
+		"""
+
 		length = int(strength)
 		key = []
 		number = secrets.randbelow(length)
@@ -44,18 +57,30 @@ class OneTimePad:
 		return "".join(key)
 
 	def set_key(self, text):
+		"""Set the key to encrypt text
+		:param text: The text to encrypt, in order to define the key length
+		:return: None
+		"""
 
 		global no_errors
 		no_errors = args.no_errors
 
 		self.key = ""
 		input_key = ""
-		recommended = OneTimePad.generator(len(text), args.key_length if args.key_length is not None else 32)
+
+		# Generates a default key for text
+		if args.key_length is not None:
+			recommended = OneTimePad.generator(len(text), args.key_length)
+		else:
+			recommended = OneTimePad.generator(len(text))
 
 		print(f"Recommended key : {recommended}")
 
 		while len(input_key) < len(text) and len(self.key) < len(text):
-			input_key = str(input(f"Enter a key (must be longer or equal to {len(text)}), type 'default' to use recommended key : "))
+
+			input_key = str(input(
+				f"Enter a key (must be longer or equal to {len(text)}), type 'default' to use recommended key : "))
+
 			if input_key == "default":
 				self.key = recommended
 
@@ -68,10 +93,16 @@ class OneTimePad:
 			self.key = input_key
 
 	def encrypt(self, text, key=None):
+		"""Encrypt a piece of text
+		:param text: The text to encrypt
+		:param key: The key to encrypt the text with (None by default, has to be entered manually)
+		:return: The cyphered text as a string
+		"""
 
 		global debug_mode, no_errors
 
 		self.key = key
+		self.text = text
 
 		if self.key is None:
 			OneTimePad.set_key(instance, text)
@@ -93,7 +124,8 @@ class OneTimePad:
 
 		i = 0
 		for letters in self.text:
-			self.text[i] = ((list(OneTimePad.alphabet.values())[list(OneTimePad.alphabet.keys()).index(letters)]) + self.key[i]) % len(OneTimePad.alphabet)
+			self.text[i] = ((list(OneTimePad.alphabet.values())[list(OneTimePad.alphabet.keys()).index(letters)]) +
+							self.key[i]) % len(OneTimePad.alphabet)
 			i += 1
 
 		if debug_mode:
@@ -107,6 +139,11 @@ class OneTimePad:
 		return "".join(self.text)
 
 	def decrypt(self, text, key=None):
+		"""Decrypt a piece text
+		:param text: The text to decrypt
+		:param key: The key to encrypt the text with (None by default, has to be entered manually)
+		:return: The deciphered text as a string
+		"""
 
 		global debug_mode, no_errors
 
@@ -138,7 +175,8 @@ class OneTimePad:
 		i = 0
 		try:
 			for letters in self.text:
-				self.text[i] = ((list(OneTimePad.alphabet.values())[list(OneTimePad.alphabet.keys()).index(letters)]) - self.key[i]) % len(OneTimePad.alphabet)
+				self.text[i] = ((list(OneTimePad.alphabet.values())[list(OneTimePad.alphabet.keys()).index(letters)]) -
+								self.key[i]) % len(OneTimePad.alphabet)
 				i += 1
 
 			if debug_mode:
@@ -167,6 +205,11 @@ class OneTimePad:
 		return "".join(self.text)
 
 	def encrypt_file(self, file):
+		"""Encrypt a file
+		:param file: The name of the file to encrypt
+		:return: None
+		"""
+
 		global debug_mode, no_errors
 
 		self.text = ""
@@ -200,7 +243,8 @@ class OneTimePad:
 
 		i = 0
 		for letters in self.text:
-			self.text[i] = ((list(OneTimePad.alphabet.values())[list(OneTimePad.alphabet.keys()).index(letters)]) + self.key[i]) % len(OneTimePad.alphabet)
+			self.text[i] = ((list(OneTimePad.alphabet.values())[list(OneTimePad.alphabet.keys()).index(letters)]) +
+							self.key[i]) % len(OneTimePad.alphabet)
 			i += 1
 		if debug_mode:
 			print(f"Encrypted index = {self.text}")
@@ -230,6 +274,11 @@ class OneTimePad:
 				return
 
 	def decrypt_file(self, file, key_file=None):
+		"""Decrypt a file
+		:param file: The file to decrypt
+		:param key_file: The key to encrypt the file with (None by default, has to be entered manually)
+		:return: None
+		"""
 
 		global debug_mode, no_errors
 
@@ -241,7 +290,8 @@ class OneTimePad:
 			try:
 				self.text = base64.b64decode(self.text)
 			except base64.binascii.Error:
-				print("Can't read the file. Make sure this file has been encrypted with base64/this software before trying to decrypt it.")
+				print(
+					"Can't read the file. Make sure this file has been encrypted with base64/this software before trying to decrypt it.")
 				return
 
 			if debug_mode:
@@ -271,7 +321,8 @@ class OneTimePad:
 
 		i = 0
 		for letters in self.text:
-			self.text[i] = ((list(OneTimePad.alphabet.values())[list(OneTimePad.alphabet.keys()).index(letters)]) - self.key[i]) % len(OneTimePad.alphabet)
+			self.text[i] = ((list(OneTimePad.alphabet.values())[list(OneTimePad.alphabet.keys()).index(letters)]) -
+							self.key[i]) % len(OneTimePad.alphabet)
 			i += 1
 		if debug_mode:
 			print(f"Decrypted index = {self.text}")
@@ -356,5 +407,4 @@ if __name__ == "__main__":
 			instance = OneTimePad()
 			OneTimePad.decrypt_file(instance, args.decrypt_file)
 
-# Todo : Comment the code
 # Todo : Beautify the code
