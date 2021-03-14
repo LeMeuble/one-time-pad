@@ -13,6 +13,14 @@ class KeyTooShort(Exception):
 	pass
 
 
+class InvalidKey(Exception):
+	pass
+
+
+class NotValidFormat(Exception):
+	pass
+
+
 class OneTimePad:
 
 	alphabet = {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, 'a': 10, 'b': 11,
@@ -56,6 +64,55 @@ class OneTimePad:
 		for i in range(text_length + number):
 			key.append(secrets.choice(chars))
 		return "".join(key)
+
+	def store_key(self, key_name="key.pem"):
+		"""A function that stores the key into a file
+
+		:param key_name: The name of the file to write the key (key.pem by default)
+		:return: None
+		"""
+
+		if not key_name.endswith('.pem'):
+			key_name += ".pem"
+
+		if not isinstance(self.key, (str, bytes)):
+			raise InvalidKey("The key is not a valid type, or may not be defined.")
+
+		with open(key_name, "w") as file:
+			file.write("-----BEGIN PRIVATE KEY-----")
+
+			for i in range(0, len(self.key), 64):
+				file.write(f"\n{self.key[i:i+64]}")
+
+			file.write("\n-----END PRIVATE KEY-----")
+			file.close()
+
+	def open_key(self, key_file):
+		"""A function that open the specified key file
+
+		:param key_file: The name of the file to open
+		:return: None
+		"""
+		if key_file.endswith(".pem"):
+			with open(f"{key_file}") as file:
+				key = file.readlines()
+
+			i = 0
+			self.key = ""
+
+			for lines in key:
+
+				if i == 0 or i == (len(key)-1):
+					pass
+
+				else:
+					lines = lines.replace("\n", "")
+					self.key += lines
+
+				i += 1
+
+		else:
+			raise NotValidFormat("Selected file is not of a valid format (.pem)")
 
 	def set_key(self, text):
 		"""Set the key to encrypt text
@@ -357,6 +414,8 @@ class OneTimePad:
 				return
 
 
+instance = OneTimePad()
+OneTimePad.open_key(instance, "my_key_file.pem")
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
 	parser.add_argument("-encrypt", help="Encrypt a piece of text, for example -encrypt 'MyText")
@@ -414,3 +473,6 @@ if __name__ == "__main__":
 			OneTimePad.decrypt_file(instance, args.decrypt_file)
 
 # Todo : Beautify the code
+# Todo : Store key into .pem formatted file
+# Todo : Add function to open key file
+# Todo : Add function that encrypt with XOR
