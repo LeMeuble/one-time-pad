@@ -39,9 +39,14 @@ class OneTimePad:
 				'\n': 96, '\r': 97}
 	debug_mode = False
 	no_errors = False
+	no_format = False
 
-	def __init__(self, strength=32):
-		self.strength = strength
+	def __init__(self, strength):
+
+		if strength is None:
+			self.strength = 32
+		else:
+			self.strength = strength
 		self.key = None
 		self.text = None
 
@@ -58,7 +63,6 @@ class OneTimePad:
 		key = []
 		number = secrets.randbelow(length)
 		chars = string.ascii_letters + string.digits + string.punctuation
-
 		for i in range(text_length + number):
 			key.append(secrets.choice(chars))
 		return "".join(key)
@@ -70,20 +74,29 @@ class OneTimePad:
 		:return: None
 		"""
 
+		global no_format
+
 		if not key_file_name.endswith('.pem'):
 			key_file_name += ".pem"
 
-		if not isinstance(self.key, (str, bytes)):
+		if not isinstance(self.key, (str, bytes, list)):
+			print(self.key)
 			raise InvalidKey("The key is not a valid type, or may not be defined.")
 
-		with open(key_file_name, "w") as file:
-			file.write("-----BEGIN PRIVATE KEY-----")
+		if no_format:
 
-			for i in range(0, len(self.key), 64):
-				file.write(f"\n{self.key[i:i+64]}")
+			with open(key_file_name, "w") as file:
+				file.write(self.key)
+				file.close()
+		else:
+			with open(key_file_name, "w") as file:
+				file.write("-----BEGIN PRIVATE KEY-----")
 
-			file.write("\n-----END PRIVATE KEY-----")
-			file.close()
+				for i in range(0, len(self.key), 64):
+					file.write(f"\n{self.key[i:i+64]}")
+
+				file.write("\n-----END PRIVATE KEY-----")
+				file.close()
 
 	def open_key(self, key_file_name):
 		"""A function that open the specified key file
@@ -92,22 +105,30 @@ class OneTimePad:
 		:return: None
 		"""
 		if key_file_name.endswith(".pem"):
-			with open(f"{key_file_name}") as file:
-				key = file.readlines()
 
-			i = 0
-			self.key = ""
+			global no_format
 
-			for lines in key:
+			if no_format:
+				with open(f"{key_file_name}") as file:
+					self.key = file.read()
 
-				if i == 0 or i == (len(key)-1):
-					pass
+			else:
+				with open(f"{key_file_name}") as file:
+					key = file.readlines()
 
-				else:
-					lines = lines.replace("\n", "")
-					self.key += lines
+				i = 0
+				self.key = ""
 
-				i += 1
+				for lines in key:
+
+					if i == 0 or i == (len(key)-1):
+						pass
+
+					else:
+						lines = lines.replace("\n", "")
+						self.key += lines
+
+					i += 1
 
 		else:
 			raise NotValidFormat("Selected file is not of a valid format (.pem)")
@@ -120,16 +141,12 @@ class OneTimePad:
 		"""
 
 		global no_errors
-		no_errors = args.no_errors
 
 		self.key = ""
 		input_key = ""
 
 		# Generates a default key for text
-		if args.key_length is not None:
-			recommended = OneTimePad.generator(len(text), args.key_length)
-		else:
-			recommended = OneTimePad.generator(len(text))
+		recommended = OneTimePad.generator(len(text), self.strength)
 
 		print(f"Recommended key : {recommended}")
 
@@ -165,6 +182,8 @@ class OneTimePad:
 		if self.key is None:
 			self.set_key(text)
 
+		self.store_key()
+
 		self.text = list(text)
 		self.key = list(self.key)
 
@@ -193,8 +212,6 @@ class OneTimePad:
 		for letters in self.text:
 			self.text[i] = (list(OneTimePad.alphabet.keys())[list(OneTimePad.alphabet.values()).index(letters)])
 			i += 1
-
-		self.store_key()
 
 		return "".join(self.text)
 
@@ -286,6 +303,8 @@ class OneTimePad:
 			self.text = base64.b64encode(self.text)
 			self.text = self.text.decode()
 			f.close()
+
+		print("File opened successfully !")
 
 		self.set_key(self.text)
 		self.store_key(output_key_file_name)
@@ -436,17 +455,18 @@ class OneTimePad:
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
-	parser.add_argument("-encrypt", help="Encrypt a piece of text, for example -encrypt 'MyText")
-	parser.add_argument("-decrypt", help="Decrypt a piece of text, for example -decrypt 'MySecretText")
-	parser.add_argument("-encrypt_file", help="Encrypt the specified file")
-	parser.add_argument("-decrypt_file", help="Decrypt the specified file")
+	parser.add_argument("-encrypt", help="Encrypt a piece of text, for example -encrypt 'MyText'.")
+	parser.add_argument("-decrypt", help="Decrypt a piece of text, for example -decrypt 'MySecretText'.")
+	parser.add_argument("-encrypt_file", help="Encrypt the specified file.")
+	parser.add_argument("-decrypt_file", help="Decrypt the specified file.")
 
-	parser.add_argument("-key", help="Key to encrypt or decrypt your text, for example -key 'MySecretKey'")
-	parser.add_argument("-key_file", help="Key file to decrypt your data, for example -key 'MyFile.txt_key.pem'")
-	parser.add_argument("-debug", help="Enable debug mode", action="store_true")
-	parser.add_argument("-no_errors", help="Allow to run encryption/decryption with a key shorter than required",
+	parser.add_argument("-key", help="Key to encrypt or decrypt your text, for example -key 'MySecretKey'.")
+	parser.add_argument("-key_file", help="Key file to decrypt your data, for example -key 'MyFile.txt_key.pem'.")
+	parser.add_argument("-debug", help="Enable debug mode.", action="store_true")
+	parser.add_argument("-no_errors", help="Allow to run encryption/decryption with a key shorter than required.",
 						action="store_true")
-	parser.add_argument("-key_length", help="Define the size of the random key")
+	parser.add_argument("-key_length", help="Define the size of the random key.")
+	parser.add_argument("-no_format", help="Allow key to not be formatted when used/stored.", action="store_true")
 
 	args = parser.parse_args()
 
@@ -456,38 +476,45 @@ if __name__ == "__main__":
 	if args.no_errors:
 		no_errors = True
 
+	if args.no_format:
+		no_format = True
+
 	if args.encrypt:
 		if args.key:
-			instance = OneTimePad()
+			instance = OneTimePad(args.key_length)
 			cyphered = instance.encrypt(args.encrypt, args.key)
 			print(f"Encrypted text = {cyphered}")
 		else:
-			instance = OneTimePad()
+			instance = OneTimePad(args.key_length)
 			cyphered = instance.encrypt(args.encrypt)
 			print(f"Encrypted text = {cyphered}")
 
 	if args.decrypt:
 		if args.key:
 
-			instance = OneTimePad()
+			instance = OneTimePad(args.key_length)
 			deciphered = instance.decrypt(args.decrypt, args.key)
 			print(f"Decrypted text = {deciphered}")
 
 		else:
-			instance = OneTimePad()
-			deciphered = instance.decrypt(args.decrypt)
+			instance = OneTimePad(args.key_length)
+			if args.key_file:
+				instance.open_key(args.key_file)
+				deciphered = instance.decrypt(args.decrypt, instance.key)
+			else:
+				deciphered = instance.decrypt(args.decrypt)
 			print(f"Decrypted text = {deciphered}")
 
 	if args.encrypt_file:
-		instance = OneTimePad()
+		instance = OneTimePad(args.key_length)
 		instance.encrypt_file(args.encrypt_file)
 
 	if args.decrypt_file:
 		if args.key_file:
-			instance = OneTimePad()
+			instance = OneTimePad(args.key_length)
 			instance.decrypt_file(args.decrypt_file, args.key_file)
 		else:
-			instance = OneTimePad()
+			instance = OneTimePad(args.key_length)
 			instance.decrypt_file(args.decrypt_file)
 
 # bin(ord('?'))
@@ -512,9 +539,8 @@ bin(97)
 '0b1100001'
 """
 
+# Todo : Add function that encrypt with XOR.
+# Todo work with chunks of data while working with files.
 
 # Todo : Beautify the code.
-# Todo : Add function that encrypt with XOR.
 # Todo : Modify the README.
-# Todo : Add the possibility to open non formatted keys.
-# Todo : Fix the problem with args when imported

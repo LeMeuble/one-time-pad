@@ -24,6 +24,8 @@ Use `-no_errors` to allow the cyphering / deciphering with a key shorter than th
 
 Use `-key_length` to define the additional size of the random key.
 
+Use `-no_format` to specify that you want to use/store the key in a non-formatted file. (without -----BEGIN PRIVATE KEY-----)
+
 ## Usage
 
 * From command line :  
@@ -36,8 +38,16 @@ Use `-key_length` to define the additional size of the random key.
 
 * By importing it in a file:
 
-```python 
+```python
+import main
 
+instance = main.OneTimePad(32)
+cyphered = instance.encrypt("Hello there !")
+print(f"Encrypted text = {cyphered}")
+
+instance2 = main.OneTimePad(32)
+deciphered = instance.decrypt(cyphered)
+print(deciphered)
 ```
 
     
